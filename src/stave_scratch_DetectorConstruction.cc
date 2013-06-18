@@ -2,7 +2,7 @@
 #include "stave_scratch_DetectorMessenger.hh"
 //#include "ExN02ChamberParameterisation.hh"
 //#include "ExN02MagneticField.hh"
-//#include "ExN02TrackerSD.hh"
+#include "stave_scratch_TargetSD.hh"
 
 #include "G4Material.hh"
 #include "G4Box.hh"
@@ -252,6 +252,7 @@ G4VPhysicalVolume* stave_scratch_DetectorConstruction::Construct()
          << "The chambers are " << ChamberWidth/mm << " mm of " 
          << ChamberMater->GetName() << "\n The distance between chamber is "
 	 << ChamberSpacing/cm << " cm" << G4endl;
+*/
 	 
   //------------------------------------------------ 
   // Sensitive detectors
@@ -259,11 +260,11 @@ G4VPhysicalVolume* stave_scratch_DetectorConstruction::Construct()
 
   G4SDManager* SDman = G4SDManager::GetSDMpointer();
 
-  G4String trackerChamberSDname = "ExN02/TrackerChamberSD";
-  ExN02TrackerSD* aTrackerSD = new ExN02TrackerSD( trackerChamberSDname );
-  SDman->AddNewDetector( aTrackerSD );
-  logicChamber->SetSensitiveDetector( aTrackerSD );
-*/
+  G4String targetSDname = "stave_scratch_TargetSD";
+  stave_scratch_TargetSD* aTargetSD = new stave_scratch_TargetSD( targetSDname );
+  SDman->AddNewDetector( aTargetSD );
+  logicTarget->SetSensitiveDetector( aTargetSD );
+
 //--------- Visualization attributes -------------------------------
 
   G4VisAttributes* WorldVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));//White 
