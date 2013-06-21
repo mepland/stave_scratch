@@ -24,24 +24,31 @@ class stave_scratch_TargetHit : public G4VHit
       void Draw();
       void Print();
 
+      // TODO New Root output functions
+      void Rootopen();
+      void Rootclose();
+      void Rootout();
+
   public:
   
       void SetTrackID  (G4int track)      { trackID = track; };
-      void SetChamberNb(G4int chamb)      { chamberNb = chamb; };  
+//    void SetChamberNb(G4int chamb)      { chamberNb = chamb; };  
       void SetEdep     (G4double de)      { edep = de; };
       void SetPos      (G4ThreeVector xyz){ pos = xyz; };
       
       G4int GetTrackID()    { return trackID; };
-      G4int GetChamberNb()  { return chamberNb; };
+//    G4int GetChamberNb()  { return chamberNb; };
       G4double GetEdep()    { return edep; };      
       G4ThreeVector GetPos(){ return pos; };
       
   private:
   
       G4int         trackID;
-      G4int         chamberNb;
+//    G4int         chamberNb;
       G4double      edep;
       G4ThreeVector pos;
+      int trackID_reg;
+      double edep_reg, pos_x_reg, pos_y_reg, pos_z_reg; // TODO New
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

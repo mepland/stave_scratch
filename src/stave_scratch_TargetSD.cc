@@ -16,7 +16,11 @@ stave_scratch_TargetSD::stave_scratch_TargetSD(G4String name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-stave_scratch_TargetSD::~stave_scratch_TargetSD(){ }
+stave_scratch_TargetSD::~stave_scratch_TargetSD()
+{
+// TODO Run Rootclose() here, how to call it as it is a member function of the ...Hits class? is this the right spot even, where is the constructor I was going to have Rootopen run there.
+
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -40,14 +44,15 @@ G4bool stave_scratch_TargetSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 
   stave_scratch_TargetHit* newHit = new stave_scratch_TargetHit();
   newHit->SetTrackID  (aStep->GetTrack()->GetTrackID());
-  newHit->SetChamberNb(aStep->GetPreStepPoint()->GetTouchableHandle() //TODO Chamber is still alive???
-                                               ->GetCopyNumber());
+//  newHit->SetChamberNb(aStep->GetPreStepPoint()->GetTouchableHandle()
+//                                               ->GetCopyNumber());
   newHit->SetEdep     (edep);
   newHit->SetPos      (aStep->GetPostStepPoint()->GetPosition());
   targetCollection->insert( newHit );
   
-  //newHit->Print();
-  //newHit->Draw();
+  newHit->Print();
+  newHit->Draw();
+//newHit->Rootout();//TODO New code to write event info to root file
 
   return true;
 }
