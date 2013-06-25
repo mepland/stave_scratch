@@ -47,6 +47,10 @@ class stave_scratch_DetectorConstruction : public G4VUserDetectorConstruction
      G4Box*             solidTarget;   // pointer to the solid Target
      G4LogicalVolume*   logicTarget;   // pointer to the logical Target
      G4VPhysicalVolume* physiTarget;   // pointer to the physical Target
+
+     G4Box*             solidCulayer1;
+     G4LogicalVolume*   logicCulayer1;  
+     G4VPhysicalVolume* physiCulayer1;
                
 //     G4Box*             solidTracker;  // pointer to the solid Tracker
 //     G4LogicalVolume*   logicTracker;  // pointer to the logical Tracker
@@ -57,7 +61,9 @@ class stave_scratch_DetectorConstruction : public G4VUserDetectorConstruction
 //     G4VPhysicalVolume* physiChamber;  // pointer to the physical Chamber
      
      G4Material*         TargetMater;  // pointer to the target  material
-     G4Material*         ChamberMater; // pointer to the chamber material
+//     G4Material*         ChamberMater; // pointer to the chamber material
+     G4Material*         Culayer1Mater; // pointer to the Culayer1 material
+
 
 //     G4VPVParameterisation* chamberParam; // pointer to chamber parameterisation
      G4UserLimits* stepLimit;             // pointer to user step limits

@@ -24,10 +24,10 @@
  
 stave_scratch_DetectorConstruction::stave_scratch_DetectorConstruction()
 :solidWorld(0), logicWorld(0), physiWorld(0),
- solidTarget(0), logicTarget(0), physiTarget(0), 
-// solidTracker(0),logicTracker(0),physiTracker(0), 
+//solidTarget(0), logicTarget(0), physiTarget(0),
+//solidCulayer1(), logicCulayer1(0), physiCulayer1(0),
 // solidChamber(0),logicChamber(0),physiChamber(0), 
- TargetMater(0),
+// TargetMater(0), Culayer1Mater(),
 // ChamberMater(0), chamberParam(0),
  stepLimit(0),
 //  fpMagField(0),
@@ -139,19 +139,12 @@ G4VPhysicalVolume* stave_scratch_DetectorConstruction::Construct()
 
 //--------- Sizes of the principal geometrical components (solids)  ---------
   
-//  NbOfChambers = 5;
-//  ChamberWidth = 10*cm; 
-//  ChamberSpacing = 80*cm;
-//  fTrackerLength = (NbOfChambers+1)*ChamberSpacing; // Full length of Tracker
 
   fWorldLength = 20*cm;			// Full length of world
 
   TargetMater  = Silicon;
+  Culayer1Mater = Copper;
 //  ChamberMater = Air;
-
-//  fTargetLength  = 10.0*cm;                    // Full length of Target
-//  G4double targetSize  = 0.5*fTargetLength;    // Half length of the Target  
-//  G4double trackerSize = 0.5*fTrackerLength;   // Half length of the Tracker
       
 //--------- Definitions of Solids, Logical Volumes, Physical Volumes ---------
   
@@ -180,12 +173,13 @@ G4VPhysicalVolume* stave_scratch_DetectorConstruction::Construct()
                                  0);              // copy number
 				 
   //------------------------------ 
-  // Target
+  // Target, one 10x10 cm square of Si
   //------------------------------
   
   G4ThreeVector positionTarget = G4ThreeVector(0, 0, 0);
-// One module 10x10 cm square,   
-  solidTarget = new G4Box("target",0.5*9.75*cm,0.5*9.75*cm,0.5*0.320*mm); // z is 0.5*0.320*cm pending better info. Use halflengths, formally targetSize
+  G4double Target_Half_Thickness = 0.5*0.320*mm;
+
+  solidTarget = new G4Box("target",0.5*9.75*cm,0.5*9.75*cm,Target_Half_Thickness); // z is 0.5*0.320*cm pending better info. Use halflengths, formally targetSize
   logicTarget = new G4LogicalVolume(solidTarget,TargetMater,"Target",0,0,0);
 
   physiTarget = new G4PVPlacement(0,               // no rotation
@@ -197,62 +191,32 @@ G4VPhysicalVolume* stave_scratch_DetectorConstruction::Construct()
 				  0);              // copy number 
 
   G4cout << "Target is made of " << TargetMater->GetName() << G4endl;
-/*
+
+
   //------------------------------ 
-  // Tracker
+  // Culayer1, square layer of Cu
   //------------------------------
   
-  G4ThreeVector positionTracker = G4ThreeVector(0,0,0);
-  
-  solidTracker = new G4Box("tracker",trackerSize,trackerSize,trackerSize);
-  logicTracker = new G4LogicalVolume(solidTracker , Air, "Tracker",0,0,0);  
-  physiTracker = new G4PVPlacement(0,              // no rotation
-				  positionTracker, // at (x,y,z)
-				  logicTracker,    // its logical volume				  
-				  "Tracker",       // its name
+  G4double Culayer1_Half_Thickness = 0.5*0.320*mm;
+  G4ThreeVector positionCulayer1 = positionTarget + G4ThreeVector(0, 0, (Target_Half_Thickness + Culayer1_Half_Thickness));
+   
+  solidCulayer1 = new G4Box("Culayer1",0.5*9.75*cm,0.5*9.75*cm,Culayer1_Half_Thickness);
+  logicCulayer1 = new G4LogicalVolume(solidCulayer1,Culayer1Mater,"Culayer1",0,0,0);
+
+  physiCulayer1 = new G4PVPlacement(0,               // no rotation
+				  positionCulayer1,  // at (x,y,z)
+				  logicCulayer1,     // its logical volume				  
+				  "Culayer1",        // its name
 				  logicWorld,      // its mother  volume
 				  false,           // no boolean operations
 				  0);              // copy number 
 
-  //------------------------------ 
-  // Tracker segments
-  //------------------------------
-  // 
-  // An example of Parameterised volumes
-  // dummy values for G4Box -- modified by parameterised volume
-*/
+  G4cout << "Culayer1 is made of " << Culayer1Mater->GetName() << G4endl;
+
 
 //  solidChamber = new G4Box("chamber", 100*cm, 100*cm, 10*cm); 
 //  logicChamber = new G4LogicalVolume(solidChamber,ChamberMater,"Chamber",0,0,0);
 
-/*  
-  G4double firstPosition = -trackerSize + 0.5*ChamberWidth;
-  G4double firstLength = fTrackerLength/10;
-  G4double lastLength  = fTrackerLength;
-   
-  chamberParam = new ExN02ChamberParameterisation(  
-			   NbOfChambers,          // NoChambers 
-			   firstPosition,         // Z of center of first 
-			   ChamberSpacing,        // Z spacing of centers
-			   ChamberWidth,          // Width Chamber 
-			   firstLength,           // lengthInitial 
-			   lastLength);           // lengthFinal
-			   
-  // dummy value : kZAxis -- modified by parameterised volume
-  //
-  physiChamber = new G4PVParameterised(
-                            "Chamber",       // their name
-                            logicChamber,    // their logical volume
-                            logicTracker,    // Mother logical volume
-			    kZAxis,          // Are placed along this axis 
-                            NbOfChambers,    // Number of chambers
-                            chamberParam);   // The parametrisation
-
-  G4cout << "There are " << NbOfChambers << " chambers in the tracker region. "
-         << "The chambers are " << ChamberWidth/mm << " mm of " 
-         << ChamberMater->GetName() << "\n The distance between chamber is "
-	 << ChamberSpacing/cm << " cm" << G4endl;
-*/
 	 
   //------------------------------------------------ 
   // Sensitive detectors
